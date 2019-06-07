@@ -2,7 +2,7 @@
 
 converting [HEIC/HEIF](http://www.hackerfactor.com/blog/index.php?/archives/833-HEIC-Yeah.html) image files to JPEG/PNG/GIF in the browser. This tool is specifically for the browser environment, it _WILL NOT_ work in node environment.
 
-[Click here for demo]()
+[Click here for demo](https://alexcorvi.github.io/heic2any/#try)
 
 ---
 
