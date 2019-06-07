@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<title>HEIC2ANY | convert HEIC/HEIF images to PNG/JPG/PNG</title>
+		<style>
+			html {
+				background: #fff;
+			}
+			body {
+				background: #000;
+				color: #fff;
+				font-family: sans-serif;
+				max-width: 600px;
+				margin: 15px auto;
+				padding: 25px;
+				border-radius: 0 180px 0 0;
+				border-top: 20px solid #8bc34a;
+				border-left: 20px solid #8bc34a;
+			}
+			a {
+				color: #8bc34a;
+			}
+			h1 {
+				text-align: center;
+			}
+			p {
+				font-family: sans-serif;
+				font-size: 14px;
+				padding: 15px;
+			}
+			#images img {
+				height: 100px;
+				width: 100px;
+			}
+			li {
+				background: #c5e1a5;
+				color: #000;
+				padding: 5px;
+			}
+			pre {
+				background: #fff;
+				padding: 20px;
+				color: #000;
+				border: 3px solid #8bc34a;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="readme"></div>
+		<hr />
+		<h3 id="try">Try it on your own files:</h3>
+		<input type="file" id="user-file" accept="image/heic" />
+		<img src="" id="user-img" />
+		<hr />
+		<h3>Sample HEIC files:</h3>
+		<div id="loading">Loading...</div>
+		<div id="images"></div>
+		<p>Alex Corvi / MIT License</p>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script src="dist/index.js"></script>
+		<script>
+			function saveFile(blob, filename) {
+				if (window.navigator.msSaveOrOpenBlob) {
+					window.navigator.msSaveOrOpenBlob(blob, filename);
+				} else {
+					const a = document.createElement("a");
+					document.body.appendChild(a);
+					const url = window.URL.createObjectURL(blob);
+					a.href = url;
+					a.download = filename;
+					a.click();
+					setTimeout(() => {
+						window.URL.revokeObjectURL(url);
+						document.body.removeChild(a);
+					}, 0);
+				}
+			}
+
+			document
+				.getElementById("user-file")
+				.addEventListener("change", ev => {
+					const blob = ev.target.files[0];
+					console.log(blob);
+					heic2any({
+						blob
+					}).then(resultBlob => {
+						console.log(resultBlob);
+						saveFile(resultBlob, blob.name + ".png");
+					});
+				});
+
+			fetch("./readme.md")
+				.then(x => x.text())
+				.then(x => {
+					document.getElementById("readme").innerHTML = marked(x);
+				});
+
+			function loadHEIC(url) {
+				return fetch(url)
+					.then(x => x.blob())
+					.then(x => heic2any({ blob: x }))
+					.then(x => {
+						const url = URL.createObjectURL(x);
+						document.getElementById("images").innerHTML =
+							document.getElementById("images").innerHTML +
+							`<img src="${url}"/>`;
+					});
+			}
+
+			loadHEIC("./demo/1.heic")
+				.then(() => loadHEIC("./demo/2.heic"))
+				.then(() => loadHEIC("./demo/3.heic"))
+				.then(() => loadHEIC("./demo/4.heic"))
+				.then(() => loadHEIC("./demo/5.heic"))
+				.then(() => loadHEIC("./demo/6.heic"))
+				.then(() => loadHEIC("./demo/7.heic"))
+				.then(
+					() =>
+						(document.getElementById("loading").innerHTML =
+							"Finished")
+				)
+				.catch(
+					() =>
+						(document.getElementById("loading").innerHTML =
+							"Error occurred")
+				);
+		</script>
+	</body>
+</html>
