@@ -50,4 +50,6 @@ heic2any({
 });
 ```
 
+__Note:__ if you're stuck at `ERROR : Can't resolve 'fs'` consider reading this issue: [#1](https://github.com/alexcorvi/heic2any/issues/1)
+
 > This project is heavily based on the excellent [libheif](https://github.com/strukturag/libheif/) by [struktur](https://www.struktur.de/).
