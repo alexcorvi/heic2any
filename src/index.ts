@@ -2,15 +2,19 @@ import "./libheif";
 
 const supportedMIMETypes = ["image/png", "image/jpeg", "image/gif"];
 
+type ResultType = "Blob" | "ImageData"
+
 function heic2any({
 	blob,
 	toType,
-	quality
+	quality,
+	resolveTo = "Blob",
 }: {
 	blob: Blob;
 	toType?: string;
 	quality?: number;
-}): Promise<Blob> {
+	resolveTo?: ResultType;
+}): Promise<Blob | ImageData> {
 	// normalize quality
 	if (quality !== undefined) {
 		if (quality > 1 || quality < 0) {
@@ -41,32 +45,43 @@ function heic2any({
 			const w = primaryImage.get_width();
 			const h = primaryImage.get_height();
 
-			const canvas = document.createElement("canvas");
-			canvas.width = w;
-			canvas.height = h;
-			const ctx = canvas.getContext("2d");
+			if (resolveTo === "ImageData") {
+				const whiteImage = new ImageData(w, h)
+				for (let i = 0; i < w * h; i++) {
+					whiteImage.data[i * 4 + 3] = 255;
+				}
 
-			if (!ctx) {
-				return reject("Error in canvas context");
+				primaryImage.display(whiteImage, display_image_data => {
+					resolve(display_image_data);
+				})
+			} else {
+				const canvas = document.createElement("canvas");
+				canvas.width = w;
+				canvas.height = h;
+				const ctx = canvas.getContext("2d");
+
+				if (!ctx) {
+					return reject("Error in canvas context");
+				}
+
+				const whiteImage = ctx.createImageData(w, h);
+				for (let i = 0; i < w * h; i++) {
+					whiteImage.data[i * 4 + 3] = 255;
+				}
+
+				primaryImage.display(whiteImage, display_image_data => {
+					ctx.putImageData(display_image_data, 0, 0);
+					canvas.toBlob(
+						resultingBlob => {
+							if (resultingBlob) {
+								resolve(resultingBlob);
+							}
+						},
+						toType,
+						quality
+					);
+				});
 			}
-
-			const whiteImage = ctx.createImageData(w, h);
-			for (let i = 0; i < w * h; i++) {
-				whiteImage.data[i * 4 + 3] = 255;
-			}
-
-			primaryImage.display(whiteImage, display_image_data => {
-				ctx.putImageData(display_image_data, 0, 0);
-				canvas.toBlob(
-					resultingBlob => {
-						if (resultingBlob) {
-							resolve(resultingBlob);
-						}
-					},
-					toType,
-					quality
-				);
-			});
 		};
 		reader.readAsArrayBuffer(blob);
 	});

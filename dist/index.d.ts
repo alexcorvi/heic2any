@@ -1,7 +1,9 @@
 import "./libheif";
-declare function heic2any({ blob, toType, quality }: {
+declare type ResultType = "Blob" | "ImageData";
+declare function heic2any({ blob, toType, quality, resolveTo, }: {
     blob: Blob;
     toType?: string;
     quality?: number;
-}): Promise<Blob>;
+    resolveTo?: ResultType;
+}): Promise<Blob | ImageData>;
 export default heic2any;
