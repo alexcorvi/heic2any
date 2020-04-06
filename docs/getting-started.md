@@ -48,7 +48,7 @@ fetch("./my-image.heic")
 	});
 ```
 
-**[JSFiddle Demo]()**
+**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/nLbmw5fk/5/)**
 
 3. **Compressing and lowering the quality**: The following example will convert `heic` file to `jpeg`, with low quality.
 
@@ -73,7 +73,7 @@ fetch("./my-image.heic")
 	});
 ```
 
-**[JSFiddle Demo]()**
+**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/wd139bya/1/)**
 
 4. **Supporting multiple images**: As some `heic` files are actually multiple images, you might want to extract them into multiple `png` files like the example below.
 
@@ -98,7 +98,7 @@ fetch("./my-image.heic")
 	});
 ```
 
-**[JSFiddle Demo]()**
+**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/x53hncry/6/)**
 
 5. **Supporting moving images**: Multiple `heic` images means that it is a moving image, so you might want to convert it to a `gif` image.
 
@@ -121,4 +121,4 @@ fetch("./my-image.heic")
 	});
 ```
 
-**[JSFiddle Demo]()**
+**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/5w7xe6jt/6/)**
