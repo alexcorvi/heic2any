@@ -1,55 +1,32 @@
 # HEIC2ANY
 
-converting [HEIC/HEIF](http://www.hackerfactor.com/blog/index.php?/archives/833-HEIC-Yeah.html) image files to JPEG/PNG/GIF in the browser. This tool is specifically for the browser environment, it _WILL NOT_ work in node environment.
+[Demo, Documentation & more](https://alexcorvi.github.io/heic2any/)
 
-[Click here for demo](https://alexcorvi.github.io/heic2any/#try)
+Client-side (browser-side, using Javascript) conversion of [HEIC/HEIF](http://www.hackerfactor.com/blog/index.php?/archives/833-HEIC-Yeah.html) image files to JPEG, PNG, or GIF.
 
----
+### What is HEIC format?
 
--   Installation: yarn
+> High Efficiency Image File Format (HEIC) is a new image container format from the developers of MPEG, a popular audio and video compression standard. HEIC will be used by default on new photos on iOS 11, and it’s designed to save you storage space. As it’s a new container format, there will be some incompatibilities along the way, and Apple does a good job at handling most of these. iOS 11 will automatically share HEIC files as the default JPEG format for apps, so you won’t notice anything when you share a photo on Twitter or Instagram. iOS 11 also offers to automatically transfer photos and videos in a compatible format for Mac or PC users, useful if you’re simply plugging your iPhone into your laptop or PC.
+> [theverge.com](https://www.theverge.com/2017/9/19/16332192/apple-ios-11-heic-iphone-image-format)
 
-```bash
-yarn add heic2any
-```
+### Why you might need it?
 
--   Installation: npm
+While developing some web-based application that should be able to handle mobile uploads, I've come across a problem where browsers can not display certain images uploaded from the iPhone, after investigating through the issue, I noticed that that my iPhone was giving a `heic` formatted image.
 
-```bash
-npm install heic2any
-```
+Currently there are [zero web browsers](https://caniuse.com/#search=heif) that support HEIC photos. Even Apple's latest-greatest version of Safari can't decode HEIC and doesn't recognize the "image/heic" mimetype. A solution that came across my mind is to utilize the benefits of high resolution and low storage of heic images when storing in the server and client-side conversion to JPEG for viewing on the browser.
 
--   Installation: no module bundler
+### Usage and limitations
 
-```html
-<!-- just include the file in a script tag -->
-<script src="./dist/index.js">
-```
+This library would typically be used for viewing purposes, as currently it's not focusing on copying any metadata from the original `heic` file to the output `jpeg`, `gif` or `png`. The development process of this library is focusing on viewing a browser-consumable version of an `heic` file, and doing it quickly, asynchronously (using web workers) and accurately. This library would even convert `heic` containers that have multiple `heic` images into a moving `gif`.
 
--   Usage: Typescript & Javascript
+However, if you're planning on storing the files (not just viewing them), I'd suggest you look for a server-side tool, or you try to get your hands dirty and contribute to this library and make it capable of storing metadata.
 
-```typescript
-import heic2any from "heic2any";
-// or
-const heic2any = require("heic2any");
-// skip the lines above if you're not using a module bundler
-// and would prefer to include a <script> tag in your HTML file
+Last but not least, this tool is specifically for the browser environment, it **will not** work in node environment.
 
-// this is our heif image file
-const HEICBlobFile = new Blob();
+### Known issues
 
-heic2any({
-	// required: the HEIF blob file
-	blob: HEICBlobFile,
-	// (optional) MIME type of the target file
-	// it can be "image/jpeg", "image/png" or "image/gif"
-	// defaults to "image/png"
-	toType: "image/jpeg",
-	// conversion quality
-	// a number ranging from 0 to 1
-	quality: 0.8
-});
-```
+Those are the known issues of the library, pull requests are welcome:
 
-__Note:__ if you're stuck at `ERROR : Can't resolve 'fs'` consider reading this issue: [#1](https://github.com/alexcorvi/heic2any/issues/1)
-
-> This project is heavily based on the excellent [libheif](https://github.com/strukturag/libheif/) by [struktur](https://www.struktur.de/).
+1. Library doesn't take any metadata from the original file, resulting file doesn't have any metadata.
+2. Library can convert bursts into an animated `gif`, however when a `heic` animation is given (like the stars animation in the demo) library will only take the first shot of the animation.
+3. Support for IE11 is not here yet.

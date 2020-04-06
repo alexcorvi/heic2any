@@ -1,128 +1,306 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<title>HEIC2ANY | convert HEIC/HEIF images to PNG/JPG/PNG</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>
+			Heic2any: Converting HEIF/HEIF image formats to PNG in the browser
+		</title>
+
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<link href="./assets/style.min.css" rel="stylesheet" />
 		<style>
-			html {
-				background: #fff;
+			#demo-sample-files img {
+				height: 44px;
+				margin-left: 1px;
+				margin-top: 1px;
 			}
-			body {
-				background: #000;
-				color: #fff;
-				font-family: sans-serif;
-				max-width: 600px;
-				margin: 15px auto;
-				padding: 25px;
-				border-radius: 0 180px 0 0;
-				border-top: 20px solid #8bc34a;
-				border-left: 20px solid #8bc34a;
-			}
-			a {
-				color: #8bc34a;
-			}
-			h1 {
-				text-align: center;
-			}
-			p {
-				font-family: sans-serif;
-				font-size: 14px;
-				padding: 15px;
-			}
-			#images img {
-				height: 100px;
-				width: 100px;
-			}
-			li {
-				background: #c5e1a5;
-				color: #000;
+			#error-on-try {
+				font-size: 13px;
+				background: #ffebee;
 				padding: 5px;
-			}
-			pre {
-				background: #fff;
-				padding: 20px;
-				color: #000;
-				border: 3px solid #8bc34a;
+				border: 1px solid red;
+				display: none;
 			}
 		</style>
 	</head>
+
 	<body>
-		<div id="readme"></div>
-		<hr />
-		<h3 id="try">Try it on your own files:</h3>
-		<input type="file" id="user-file" accept="image/heic" />
-		<img src="" id="user-img" />
-		<hr />
-		<h3>Sample HEIC files:</h3>
-		<div id="loading">Loading...</div>
-		<div id="images"></div>
-		<p>Alex Corvi / MIT License</p>
-		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-		<script src="dist/index.js"></script>
-		<script>
-			function saveFile(blob, filename) {
-				if (window.navigator.msSaveOrOpenBlob) {
-					window.navigator.msSaveOrOpenBlob(blob, filename);
-				} else {
-					const a = document.createElement("a");
-					document.body.appendChild(a);
-					const url = window.URL.createObjectURL(blob);
-					a.href = url;
-					a.download = filename;
-					a.click();
-					setTimeout(() => {
-						window.URL.revokeObjectURL(url);
-						document.body.removeChild(a);
-					}, 0);
-				}
-			}
+		<!-- Main navigation
+	=========================================== -->
+		<header class="navbar navbar-static-top bs-docs-nav" id="top">
+			<div class="container">
+				<div class="navbar-header" role="banner">
+					<button
+						class="navbar-toggle"
+						type="button"
+						data-toggle="collapse"
+						data-target=".bs-navbar-collapse"
+					>
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a
+						class="navbar-brand"
+						href="http://alexcorvi.github.io/heic2any/"
+						>Heic2any</a
+					>
+				</div>
+				<nav
+					class="collapse navbar-collapse bs-navbar-collapse"
+					role="navigation"
+				>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="#demo">Demo</a>
+						</li>
+						<li>
+							<a href="https://github.com/alexcorvi/heic2any"
+								>View on GitHub</a
+							>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</header>
 
-			document
-				.getElementById("user-file")
-				.addEventListener("change", ev => {
-					const blob = ev.target.files[0];
-					console.log(blob);
-					heic2any({
-						blob
-					}).then(resultBlob => {
-						console.log(resultBlob);
-						saveFile(resultBlob, blob.name + ".png");
-					});
-				});
+		<!-- Header
+	=========================================== -->
 
-			fetch("./readme.md")
-				.then(x => x.text())
-				.then(x => {
-					document.getElementById("readme").innerHTML = marked(x);
-				});
+		<div
+			class="bs-docs-masthead"
+			id="content"
+			style="background: linear-gradient(135deg, #673ab7, #3f51b5);"
+		>
+			<div class="container">
+				<h1 class="home-title">Heic2any</h1>
+				<p class="lead" style="font-size: 18px; margin-top: 25px;">
+					Converting HEIF/HEIF image formats to PNG in the browser
+				</p>
+				<p class="lead">
+					<a
+						data-bootbox="download-popup"
+						data-bootbox-size="large"
+						class="btn btn-outline-inverse btn-lg"
+						>Download</a
+					>
+				</p>
+			</div>
+		</div>
 
-			function loadHEIC(url) {
-				return fetch(url)
-					.then(x => x.blob())
-					.then(x => heic2any({ blob: x }))
-					.then(x => {
-						const url = URL.createObjectURL(x);
-						document.getElementById("images").innerHTML =
-							document.getElementById("images").innerHTML +
-							`<img src="${url}"/>`;
-					});
-			}
+		<div id="download-popup" title="Download" class="hidden">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">Install with NPM</div>
+						<div class="panel-body">
+							<p>You can get this library via NPM or yarn</p>
+							<pre><code>$ npm i --save heic2any
+$ yarn add heic2any</code></pre>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Download full version</div>
+						<div class="panel-body">
+							<p>Compiled version into single file.</p>
+							<a
+								href="https://raw.githubusercontent.com/alexcorvi/heic2any/master/dist/heic2any.js"
+								>Download</a
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Download minified version
+						</div>
+						<div class="panel-body">
+							<p>Compiled and minified version.</p>
+							<a
+								href="https://raw.githubusercontent.com/alexcorvi/heic2any/master/dist/heic2any.min.js"
+								>Download</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-			loadHEIC("./demo/1.heic")
-				.then(() => loadHEIC("./demo/2.heic"))
-				.then(() => loadHEIC("./demo/3.heic"))
-				.then(() => loadHEIC("./demo/4.heic"))
-				.then(() => loadHEIC("./demo/5.heic"))
-				.then(() => loadHEIC("./demo/6.heic"))
-				.then(() => loadHEIC("./demo/7.heic"))
-				.then(
-					() =>
-						(document.getElementById("loading").innerHTML =
-							"Finished")
-				)
-				.catch(
-					() =>
-						(document.getElementById("loading").innerHTML =
-							"Error occurred")
-				);
+		<div class="container bs-docs-container">
+			<div class="row">
+				<div class="col-md-9" role="main">
+					<section class="bs-docs-section">
+						<h1 id="overview" class="page-header">
+							Overview
+						</h1>
+						<div id="overview-content"></div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="demo" class="page-header">
+							Demo
+						</h1>
+						<div id="demo-content">
+							<div>
+								<h3 id="demo-basic">
+									Sample files
+								</h3>
+								<p>
+									Following files are converted to
+									<code>image/gif</code>
+								</p>
+								<hr />
+								<p id="loading">
+									<i>Loading... please wait</i>
+								</p>
+								<div id="demo-sample-files"></div>
+
+								<a
+									href="https://github.com/alexcorvi/heic2any/tree/master/demo"
+									>Source images</a
+								>
+							</div>
+							<hr />
+							<div>
+								<h3 id="try">Try it with your files</h3>
+								<input type="file" id="user-file" />
+								<p>
+									<i style="font-size: 13px;">
+										Result will be converted to
+										<code>gif</code> and downloaded to your
+										device once the conversion is done
+									</i>
+								</p>
+								<p>
+									<i
+										style="font-size: 13px;"
+										id="error-on-try"
+									></i>
+								</p>
+							</div>
+						</div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="getting-started" class="page-header">
+							Getting started
+						</h1>
+						<div id="getting-started-content"></div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="options" class="page-header">
+							Options
+						</h1>
+						<div id="options-content"></div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="error-handling" class="page-header">
+							Error handling
+						</h1>
+						<div id="error-handling-content"></div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="credits" class="page-header">
+							Credits
+						</h1>
+						<div id="credits-content"></div>
+					</section>
+					<section class="bs-docs-section">
+						<h1 id="license" class="page-header">
+							License
+						</h1>
+						<div id="license-content"></div>
+					</section>
+				</div>
+				<div class="col-md-3" role="complementary">
+					<div class="bs-docs-sidebar hidden-print">
+						<ul class="nav bs-docs-sidenav"></ul>
+						<a class="back-to-top" href="#top">Back to top</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="bs-docs-footer" role="contentinfo">
+			<div class="container">
+				<div class="bs-docs-social">
+					<ul class="bs-docs-social-buttons">
+						<li>
+							<iframe
+								class="github-btn"
+								src="//ghbtns.com/github-btn.html?user=alexcorvi&amp;repo=heic2any&amp;type=fork&amp;count=true"
+								width="90"
+								height="20"
+								title="Fork on GitHub"
+							></iframe>
+						</li>
+						<li>
+							<iframe
+								class="github-btn"
+								src="//ghbtns.com/github-btn.html?user=alexcorvi&amp;repo=heic2any&amp;type=star&amp;count=true"
+								width="90"
+								height="20"
+								title="Star on GitHub"
+							></iframe>
+						</li>
+					</ul>
+				</div>
+
+				<p>
+					Licensed under
+					<a href="http://opensource.org/licenses/MIT" target="_blank"
+						>MIT License</a
+					>
+				</p>
+				<p>
+					Documentation template by
+					<a href="http://getbootstrap.com">Bootstrap team</a>
+				</p>
+
+				<ul class="bs-docs-footer-links muted">
+					<li>·</li>
+					<li>
+						<a href="https://github.com/alexcorvi/heic2any"
+							>GitHub</a
+						>
+					</li>
+
+					<li>·</li>
+					<li>
+						<a
+							href="https://github.com/alexcorvi/heic2any/issues?state=open"
+							>Issues</a
+						>
+					</li>
+				</ul>
+			</div>
+		</footer>
+		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+		<script
+			src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+			type="text/javascript"
+		></script>
+		<script type="text/javascript">
+			hljs.initHighlightingOnLoad();
 		</script>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script src="https://raw.githack.com/jmalarcon/ie-web-worker/master/worker.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+		<script src="./assets/script.js" type="text/javascript"></script>
+		<script src="./dist/heic2any.js" type="text/javascript"></script>
+
+		<script src="./assets/demo-user-file.js"></script>
+		<script src="./assets/demo-sample-files.js"></script>
+		<script type="text/javascript" src="./assets/load-md.js"></script>
 	</body>
 </html>
