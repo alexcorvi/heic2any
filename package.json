@@ -3,7 +3,6 @@
 	"version": "0.0.3",
 	"description": "Converting HEIC/HEIF to PNG/JPEG/GIF in the browser",
 	"main": "dist/heic2any.js",
-	"module": "dist/index.es.js",
 	"files": [
 		"dist"
 	],
