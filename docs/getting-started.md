@@ -100,7 +100,7 @@ fetch("./my-image.heic")
 
 **[JSFiddle Demo](https://jsfiddle.net/alexcorvi/x53hncry/6/)**
 
-5. **Supporting moving images**: Multiple `heic` images means that it is a moving image, so you might want to convert it to a `gif` image.
+5. **Supporting animated images**: Multiple `heic` images means that it is an animated image (like bursts), so you might want to convert it to a `gif` image.
 
 ```javascript
 // fetching the heic image
@@ -110,6 +110,7 @@ fetch("./my-image.heic")
 		heic2any({
 			blob,
 			toType: "image/gif",
+			gifInterval: 0.3, // switch frames every 0.3 second
 		})
 	)
 	.then((conversionResult) => {

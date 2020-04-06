@@ -17,7 +17,7 @@ Currently there are [zero web browsers](https://caniuse.com/#search=heif) that s
 
 ### Usage and limitations
 
-This library would typically be used for viewing purposes, as currently it's not focusing on copying any metadata from the original `heic` file to the output `jpeg`, `gif` or `png`. The development process of this library is focusing on viewing a browser-consumable version of an `heic` file, and doing it quickly, asynchronously (using web workers) and accurately. This library would even convert `heic` containers that have multiple `heic` images into a moving `gif`.
+This library would typically be used for viewing purposes, as currently it's not focusing on copying any metadata from the original `heic` file to the output `jpeg`, `gif` or `png`. The development process of this library is focusing on viewing a browser-consumable version of an `heic` file, and doing it quickly, asynchronously (using web workers) and accurately. This library would even convert `heic` containers that have multiple `heic` images into an animated `gif`.
 
 However, if you're planning on storing the files (not just viewing them), I'd suggest you look for a server-side tool, or you try to get your hands dirty and contribute to this library and make it capable of storing metadata.
 
