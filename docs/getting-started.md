@@ -122,4 +122,4 @@ fetch("./my-image.heic")
 	});
 ```
 
-**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/5w7xe6jt/6/)**
+**[JSFiddle Demo](https://jsfiddle.net/alexcorvi/1n7mLrc4/1/)**
