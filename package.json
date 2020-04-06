@@ -9,7 +9,8 @@
 	],
 	"types": "dist/heic2any.d.ts",
 	"scripts": {
-		"build": "tsc --p tsconfig.json && node ./build.js"
+		"build": "ts-node ./build/build",
+		"server": "lite-server"
 	},
 	"repository": {
 		"type": "git",
@@ -30,8 +31,15 @@
 	"homepage": "https://github.com/alexcorvi/heic2any#readme",
 	"dependencies": {},
 	"devDependencies": {
-		"typescript": "^3.5.1"
+		"@types/buble": "^0.19.2",
+		"@types/chokidar": "^2.1.3",
+		"@types/node": "^13.11.0",
+		"@types/uglify-js": "^3.0.5",
+		"buble": "^0.20.0",
+		"chokidar": "^3.3.1",
+		"lite-server": "^2.5.4",
 		"ts-node": "^8.8.2",
 		"typescript": "^3.8.3",
+		"uglify-js": "^3.8.1"
 	}
 }
