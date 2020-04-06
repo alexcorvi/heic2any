@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"lib": ["webworker", "es6", "scripthost"],
+		"declaration": true,
+		"declarationDir": "../dist",
+		"module": "ES2015",
+		"noImplicitAny": true,
+		"strict": true,
+		"outDir": "../dist",
+		"target": "es6",
+		"skipLibCheck": true
+	},
+	"include": ["./worker.ts"],
+	"exclude": ["node_modules"]
+}

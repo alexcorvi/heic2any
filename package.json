@@ -1,13 +1,13 @@
 {
 	"name": "heic2any",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Converting HEIC/HEIF to PNG/JPEG/GIF in the browser",
-	"main": "dist/index.js",
+	"main": "dist/heic2any.js",
 	"module": "dist/index.es.js",
 	"files": [
 		"dist"
 	],
-	"types": "dist/index.d.ts",
+	"types": "dist/heic2any.d.ts",
 	"scripts": {
 		"build": "tsc --p tsconfig.json && node ./build.js"
 	},
@@ -31,5 +31,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"typescript": "^3.5.1"
+		"ts-node": "^8.8.2",
+		"typescript": "^3.8.3",
 	}
 }
