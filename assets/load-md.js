@@ -28,7 +28,7 @@ async function placeMDContent(relativePath, linesToDelete, elementID) {
 }
 
 async function loadContent() {
-	await placeMDContent("./README.md", 3, "overview-content");
+	await placeMDContent("./readme.md", 3, "overview-content");
 	await placeMDContent(
 		"./docs/getting-started.md",
 		1,
