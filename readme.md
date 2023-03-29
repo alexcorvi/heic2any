@@ -30,3 +30,4 @@ Those are the known issues of the library, pull requests are welcome:
 1. Library doesn't take any metadata from the original file, resulting file doesn't have any metadata.
 2. Library can convert bursts into an animated `gif`, however when a `heic` animation is given (like the stars animation in the demo) library will only take the first shot of the animation.
 3. Support for IE11 is not here yet.
+4. The library requires a browser-like environment to work, i.e. it needs the existence of the DOM and window object.

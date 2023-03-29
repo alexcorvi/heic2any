@@ -24,7 +24,7 @@ async function fetchMD(relativePath, linesToDelete) {
 async function placeMDContent(relativePath, linesToDelete, elementID) {
 	var content = await fetchMD(relativePath, linesToDelete);
 	content = embedJSFiddleCode(content);
-	document.getElementById(elementID).innerHTML = marked(content);
+	document.getElementById(elementID).innerHTML = marked.marked(content);
 }
 
 async function loadContent() {
